@@ -1,12 +1,15 @@
 package com.Joysbrightt.BookingApp.service;
 
 import com.Joysbrightt.BookingApp.data.UserRepository;
+import com.Joysbrightt.BookingApp.dto.LoginRequest;
 import com.Joysbrightt.BookingApp.exception.UserAlreadyExistException;
 import com.Joysbrightt.BookingApp.exception.UserNotFoundException;
 import com.Joysbrightt.BookingApp.model.User;
+import jakarta.mail.AuthenticationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.PasswordAuthentication;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +48,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public Optional<User> deleteUser(Long userId) {
         userRepository.deleteById(userId);
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -65,6 +68,21 @@ public class UserServiceImpl implements UserService{
                .build();
        return userRepository.save(newUser);
     }
+
+    @Override
+    public PasswordAuthentication loginUser(LoginRequest loginRequest) throws AuthenticationFailedException {
+        User user = userRepository.findByUsername(loginRequest.getUsername());
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        {
+            throw new AuthenticationFailedException("Invalid password");
+        }
+
+        // If authentication is successful, return the PasswordAuthentication object
+    }
+
 
     @Override
     public Optional<Optional<User>> findById(Long userId) {
