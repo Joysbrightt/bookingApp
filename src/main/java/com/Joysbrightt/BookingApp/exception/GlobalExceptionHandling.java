@@ -20,4 +20,14 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUserAlreadyExistException(UserAlreadyExistException userAlreadyExistException){
         return new ResponseEntity<>(userAlreadyExistException, HttpStatus.BAD_GATEWAY);
     }
+
+    @ExceptionHandler(BookingServiceNotFoundException.class)
+    public ResponseEntity<Object> handleBookingServiceNotFoundException(BookingServiceNotFoundException bookingServiceNotFoundException){
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(BookingServiceAlreadyExistException.class)
+    public ResponseEntity<Object> handleBookingServiceAlreadyExistException(BookingServiceAlreadyExistException bookingServiceAlreadyExistException){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 }
